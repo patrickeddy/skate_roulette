@@ -98,7 +98,7 @@ const styles = `
 
   ol {
     text-align: left;
-    width: 30%;
+    width: 200px;
     margin: 1rem auto;
   }
 
