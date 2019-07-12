@@ -1,23 +1,51 @@
+const tricks = [
+  'ollie',
+  'nollie',
+  'kickflip',
+  'varial kickflip',
+  'treflip',
+  'BS flip',
+  'FS flip',
+  'fakie kickflip',
+  'hardflip',
+  'BS pop shove-it',
+  'FS pop shove-it',
+  'BS heelflip',
+  'FS heelflip',
+  'heelflip',
+  'varial heelflip',
+  'nollie kickflip',
+  'nollie varial kickflip',
+  'nollie tre flip',
+  'nollie heelflip',
+  'nollie varial heelflip',
+  'nollie FS flip',
+  'pressure flip',
+  'BS pressure flip',
+  'FS pressure flip',
+  'BS 360 kickflip',
+  'BS big spin',
+  'FS big spin',
+  'fakie FS big spin',
+  'fakie BS big spin',
+  'nollie FS big spin',
+  'nollie BS big spin',
+  '360 shove-it',
+  'hospital flip',
+]
+
+const GAME_SCORE = 'SKATE_' // _ is the second try on 'E'
 const state = {
+  availableTricks: tricks,
   currentTrick: undefined,
   score: 0,
   landedTricks: [],
   bailedTricks: [],
 }
 
-const GAME_SCORE = 'SKATE_' // _ is the second try on 'E'
-const tricks = [
-  'ollie',
-  'nollie',
-  'kickflip',
-  'BS pop shove-it',
-  'FS pop shove-it',
-  'treflip',
-  'hardflip',
-  'nollie kickflip',
-  'BS flip',
-  'FS flip',
-]
+function hasWon() {
+  return state.availableTricks.length === 0
+}
 
 function isGameOver() {
   return state.score === GAME_SCORE.length
@@ -42,9 +70,13 @@ function bailed() {
 }
 
 const styles = `
-  body {
+  html, body {
     text-align: center;
-    font-family: arial;
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
   }
 
   h3 {
@@ -64,6 +96,8 @@ const styles = `
 
   .last-try {
     color: red;
+    font-size: 1.5em;
+    margin: 1rem;
   }
 
   ol {
@@ -132,7 +166,18 @@ function renderGameState() {
   `
 }
 
+function renderWin() {
+  return `
+    <h3>You Won 🛹</h3>
+    ${renderRestartGameButton()}
+  `
+}
+
 function renderPage() {
+  if (hasWon()) {
+    return renderWin()
+  }
+
   return `
     ${isGameOver() ? renderGameSummary() : renderGameState()}
     ${isLastLetter() ? `<div class="last-try">ONE LAST TRY!</div>` : ''}
@@ -149,7 +194,10 @@ function renderMeta() {
 
 function render() {
   if (!isLastLetter()) {
-    state.currentTrick = tricks[Math.floor(Math.random() * tricks.length)]
+    const trickIndex = state.availableTricks.findIndex(function(trick) { return trick === state.currentTrick })
+    state.availableTricks.splice(trickIndex, 1)
+    const newTrick = state.availableTricks[Math.floor(Math.random() * tricks.length)]
+    state.currentTrick = newTrick
   }
 
   const headElem = document.querySelector('head')
