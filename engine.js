@@ -73,10 +73,6 @@ const styles = `
   html, body {
     text-align: center;
     font-family: Arial;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100%;
   }
 
   h3 {
