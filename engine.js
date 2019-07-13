@@ -165,6 +165,7 @@ function renderGameState() {
 function renderWin() {
   return `
     <h3>You Won 🛹</h3>
+    ${renderGameSummary()}
     ${renderRestartGameButton()}
   `
 }
